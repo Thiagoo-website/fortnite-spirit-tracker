@@ -1,5 +1,4 @@
-<!doctype html><html lang="es"><head>
-  <meta name="google-site-verification" content="YCqA8EVrlUTOPcVGcQXN-iQwqa4bmdKvlmLZ1wjL9ZY" /><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spirit Vault · Mi colección</title><style>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spirit Vault · Mi colección</title><style>
 :root{
  --bg:#05070e;--text:#f7f9ff;--muted:#93a2bb;--line:#27344d;
  --blue:#38bdf8;--cyan:#22d3ee;--purple:#9b7cff;--pink:#f472b6;
@@ -745,8 +744,236 @@ button{
 /* Rendimiento: se eliminan ciclos infinitos costosos, conservando transiciones e impactos puntuales. */
 body:after,.pic:after,.spirit-title:after,#bar,h1,.v31c-holo,.v31c-first,.variant.mastered{animation:none!important}
 </style>
-</head><body><main><h1>Mi colección de Espíritus</h1><span class="v29-badge">V35 · COLECCIONISTA</span><div id="count"></div><div class="progress"><div id="bar"></div></div><div class="tools"><input id="search" placeholder="Buscar espíritu o variante..." autocomplete="off"><div class="filters"><button type="button" class="filter active" data-filter="all">Todos</button><button type="button" class="filter" data-filter="missing">Me faltan</button><button type="button" class="filter" data-filter="have">Los tengo</button><button type="button" class="filter" data-filter="mastered">Dominados</button><button type="button" class="filter" data-filter="dead">Caídos</button></div><button type="button" id="reset">↻ REINICIAR COLECCIÓN</button><button type="button" id="dominateAll" class="v36-dominate">★ DOMINAR TODOS LOS ESPÍRITUS</button></div>
-<section id="v31-collector">
+
+<style id="v39-css">
+/* V39 · GUARDADOS + FONDO + SUGERENCIAS + CAÍDO */
+body{
+  background:
+    radial-gradient(900px 520px at 8% -5%,#6d4cff35,transparent 65%),
+    radial-gradient(820px 520px at 96% 8%,#28dfff2d,transparent 62%),
+    radial-gradient(850px 560px at 50% 105%,#b14cff28,transparent 65%),
+    radial-gradient(500px 300px at 50% 45%,#314cff10,transparent 70%),
+    linear-gradient(125deg,#02040b 0%,#080d1b 42%,#050815 75%,#02040a 100%) !important;
+  background-attachment:fixed;
+}
+body:before{
+  opacity:.24 !important;
+  background-image:
+    radial-gradient(circle,#ffffff 0 1px,transparent 1.5px),
+    radial-gradient(circle,#ffffff 0 1px,transparent 1.5px),
+    linear-gradient(#ffffff06 1px,transparent 1px),
+    linear-gradient(90deg,#ffffff06 1px,transparent 1px) !important;
+  background-size:97px 97px,151px 151px,42px 42px,42px 42px !important;
+  mask-image:linear-gradient(to bottom,black,transparent 94%) !important;
+}
+.v39-save-area{max-width:1180px;margin:0 auto 22px;padding:15px;border:1px solid #ffffff18;border-radius:20px;background:linear-gradient(145deg,#11172ad9,#070b15d9);box-shadow:0 12px 35px #0006;backdrop-filter:blur(14px)}
+.v39-save-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
+.v39-save-head b{font-size:13px;letter-spacing:.5px}.v39-save-head span{font-size:10px;color:#8d9ab2}
+.v39-save-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.v39-save-grid button{border:1px solid #ffffff18;border-radius:13px;padding:11px 9px;background:linear-gradient(135deg,#151c30,#0b101d);color:#fff;font-weight:900;cursor:pointer}
+.v39-save-grid button:hover{transform:translateY(-2px);border-color:#63ddff66;box-shadow:0 8px 22px #0007}
+.v39-save-grid .v39-danger{background:linear-gradient(135deg,#32141b,#140a10);border-color:#ff667344}
+.v39-slot{font-size:10px;color:#8fa0ba;margin-top:7px;min-height:14px}
+.v39-slot strong{color:#cfe9ff}
+.v39-panel-title{font-size:12px;font-weight:1000;letter-spacing:1px;margin-bottom:12px;color:#bfcbea}
+.v39-form{display:grid;gap:10px}.v39-form textarea{width:100%;min-height:130px;resize:vertical;border:1px solid #ffffff18;border-radius:14px;padding:13px;background:#070c16;color:#fff;outline:0;font:inherit}.v39-form textarea:focus{border-color:#63ddff88;box-shadow:0 0 0 3px #63ddff12}
+.v39-form button{border:1px solid #63ddff55;border-radius:13px;padding:11px;background:linear-gradient(135deg,#183c52,#18234b);color:#fff;font-weight:1000;cursor:pointer}
+.v39-suggestion{padding:11px;border:1px solid #ffffff12;border-radius:13px;background:#ffffff05;margin-top:8px}.v39-suggestion small{display:block;color:#73849e;margin-bottom:5px}.v39-suggestion p{margin:0;white-space:pre-wrap;word-break:break-word;font-size:12px;color:#e5ebf5}
+.v39-family-modal{position:fixed;inset:0;z-index:10003;display:none;place-items:center;padding:18px;background:rgba(2,5,15,.82);backdrop-filter:blur(12px)}
+.v39-family-modal.show{display:grid}
+.v39-family-box{position:relative;width:min(800px,95vw);padding:28px 22px;border:1px solid #ffffff25;border-radius:30px;text-align:center;background:radial-gradient(circle at 50% 0,#775cff35,transparent 55%),linear-gradient(145deg,#151c35f7,#070b16f7);box-shadow:0 0 100px #6e5cff35,0 30px 100px #000c;overflow:hidden}
+.v39-family-box:before{content:"";position:absolute;inset:-50%;background:conic-gradient(from 0deg,transparent,#6ddfff22,transparent,#b86cff22,transparent);animation:v39Aura 7s linear infinite}
+.v39-family-box>*{position:relative;z-index:1}
+.v39-family-kicker{font-size:10px;letter-spacing:3px;font-weight:1000;color:#8de8ff}
+.v39-family-title{margin:5px 0 3px;font-size:clamp(28px,5vw,48px);font-weight:1000;background:linear-gradient(90deg,#fff,#ffd85b,#9effd0,#72ddff,#fff);background-size:250%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:v39Title 2.5s linear infinite}
+.v39-family-sub{margin:0 0 18px;color:#9aa8bf;font-size:12px}
+.v39-family-variants{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.v39-family-card{border:1px solid #ffffff18;border-radius:16px;padding:8px;background:#050914aa;animation:v39Card .7s cubic-bezier(.2,.9,.2,1) both}
+.v39-family-card:nth-child(2){animation-delay:.08s}.v39-family-card:nth-child(3){animation-delay:.16s}.v39-family-card:nth-child(4){animation-delay:.24s}
+.v39-family-card img{width:100%;height:125px;object-fit:contain;display:block;filter:drop-shadow(0 10px 15px #0009)}
+.v39-family-card b{display:block;font-size:10px;margin-top:4px;color:#dce6f7}
+.v39-family-close{margin-top:18px;border:1px solid #6ee7b755;border-radius:13px;padding:11px 18px;background:linear-gradient(135deg,#16432f,#10241d);color:#8dffc0;font-weight:1000;cursor:pointer}
+@keyframes v39Aura{to{transform:rotate(360deg)}}@keyframes v39Title{to{background-position:250%}}@keyframes v39Card{from{opacity:0;transform:translateY(25px) scale(.9)}to{opacity:1;transform:none}}
+@media(max-width:760px){.v39-save-grid{grid-template-columns:repeat(2,1fr)}.v39-family-variants{grid-template-columns:repeat(2,1fr)}.v39-family-card img{height:105px}}
+@media(prefers-reduced-motion:reduce){.v39-family-box:before,.v39-family-title,.v39-family-card{animation:none!important}}
+</style>
+
+<style id="v39-image-fallback-css">
+.v39-img-failed{position:relative}
+.v39-img-failed:after{content:"Imagen no disponible";position:absolute;inset:0;display:grid;place-items:center;color:#91a0b8;font-size:10px;font-weight:900;background:#050914}
+</style>
+<style>
+/* V40: las imágenes pasan por un proxy de imágenes para evitar bloqueos/hotlink de SpriteLocker. */
+.pic img{display:block!important;visibility:visible!important;opacity:1!important;}
+</style>
+<style id="compact-panels-css">
+.compact-panel{max-width:1180px;margin:10px auto;border:1px solid #ffffff14;border-radius:18px;background:linear-gradient(145deg,#0b1120cc,#060a13cc);overflow:hidden;box-shadow:0 8px 28px #0004}
+.compact-panel>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;font-weight:1000;letter-spacing:.5px;color:#e9f1ff;user-select:none}
+.compact-panel>summary::-webkit-details-marker{display:none}
+.compact-panel>summary:after{content:"＋";font-size:18px;color:#8de8ff;transition:transform .2s}
+.compact-panel[open]>summary:after{content:"−"}
+.compact-panel>summary span{font-size:12px}.compact-panel>summary small{font-size:9px;color:#71819b;font-weight:700;margin-left:auto}
+.compact-panel-body{padding:0 12px 12px}
+#v31-collector.compact-panel{margin-top:10px}
+@media(max-width:620px){.compact-panel>summary{align-items:flex-start}.compact-panel>summary small{display:none}}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="v50-kill-all-old-finals">
+/* SOLO LA ÚLTIMA FINAL EXISTE. Todas las anteriores quedan inutilizadas. */
+.v34-complete,.v36-victory,.v36-family-burst,
+.v42-final-cinema,.v42-trophy-cinema,
+.v43-final-cinema,.v43-trophy,
+.v44-final-cinema,.v44-trophy,
+.v46-final-cinema,.v46-trophy,
+.v47-final-cinema,.v47-trophy,
+#v43Final,#v44Final,#v44Trophy,#v46FinalCinema,#v46TrophyCinema,#v47FinalCinema,#v47TrophyCinema{
+ display:none!important;
+ animation:none!important;
+}
+</style>
+
+
+<style id="v51-cinema-and-trophies">
+/* Fondo: verde + turquesa + amarillo, sin negro ni blanco dominante */
+body{
+ background:
+  radial-gradient(circle at 12% 18%,rgba(53,169,111,.55),transparent 34%),
+  radial-gradient(circle at 88% 20%,rgba(32,169,159,.55),transparent 36%),
+  radial-gradient(circle at 52% 105%,rgba(213,173,53,.52),transparent 42%),
+  linear-gradient(135deg,#257f5d 0%,#218f87 52%,#aa8b32 100%) !important;
+ background-attachment:fixed!important;
+}
+
+/* Trofeos: cada uno tendrá una animación y combinación cromática propia */
+#v51Trophy{
+ display:none;position:fixed;inset:0;z-index:190000;align-items:center;justify-content:center;
+ background:rgba(32,83,67,.55); /* nada de negro */
+}
+#v51Trophy.on{display:flex}
+.v51-card{
+ width:min(720px,88vw);padding:38px;border-radius:28px;text-align:center;
+ color:#173f34;border:3px solid #20a99f;background:#d9eadf;
+}
+.v51-icon{font-size:78px;line-height:1}
+.v51-name{font-size:clamp(25px,4vw,42px);font-weight:1000;margin-top:12px}
+.v51-reason{margin-top:9px;font-weight:700}
+.v51-line{height:7px;border-radius:20px;margin:22px auto 0;width:78%;overflow:hidden;background:rgba(23,63,52,.16)}
+.v51-line i{display:block;height:100%;width:100%}
+
+/* 16 animaciones diferentes */
+.v51-a{animation:v51a .65s both}.v51-b{animation:v51b .85s both}
+.v51-c{animation:v51c .8s both}.v51-d{animation:v51d .7s both}
+.v51-e{animation:v51e .95s both}.v51-f{animation:v51f .8s both}
+.v51-g{animation:v51g .9s both}.v51-h{animation:v51h .9s both}
+.v51-i{animation:v51i .85s both}.v51-j{animation:v51j .8s both}
+.v51-k{animation:v51k .95s both}.v51-l{animation:v51l .85s both}
+.v51-m{animation:v51m .75s both}.v51-n{animation:v51n .9s both}
+.v51-o{animation:v51o 1s both}.v51-p{animation:v51p .85s both}
+@keyframes v51a{from{opacity:0;transform:translateY(65px)}to{opacity:1}}
+@keyframes v51b{from{opacity:0;transform:scale(.55)}65%{transform:scale(1.08)}to{opacity:1;transform:scale(1)}}
+@keyframes v51c{from{opacity:0;transform:rotateX(70deg)}to{opacity:1;transform:none}}
+@keyframes v51d{from{opacity:0;transform:translateX(-80px)}to{opacity:1;transform:none}}
+@keyframes v51e{from{opacity:0;transform:rotate(-8deg) scale(.75)}65%{transform:rotate(4deg) scale(1.05)}to{opacity:1;transform:none}}
+@keyframes v51f{from{opacity:0;transform:translateY(-65px)}to{opacity:1;transform:none}}
+@keyframes v51g{from{opacity:0;transform:skewX(12deg) scale(.8)}to{opacity:1;transform:none}}
+@keyframes v51h{from{opacity:0;transform:rotate(180deg) scale(.5)}to{opacity:1;transform:none}}
+@keyframes v51i{from{opacity:0;transform:scale(.7) rotate(-7deg)}55%{transform:scale(1.1) rotate(2deg)}to{opacity:1;transform:none}}
+@keyframes v51j{from{opacity:0;transform:translateX(80px)}to{opacity:1;transform:none}}
+@keyframes v51k{from{opacity:0;transform:translateY(45px) scale(.7)}65%{transform:translateY(-5px) scale(1.04)}to{opacity:1;transform:none}}
+@keyframes v51l{from{opacity:0;transform:rotateY(80deg)}to{opacity:1;transform:none}}
+@keyframes v51m{from{opacity:0;transform:scale(.4)}70%{transform:scale(1.07)}to{opacity:1;transform:none}}
+@keyframes v51n{from{opacity:0;transform:translate(60px,40px) rotate(12deg)}to{opacity:1;transform:none}}
+@keyframes v51o{from{opacity:0;transform:translateY(75px) scale(.5)}55%{transform:translateY(-8px) scale(1.1)}to{opacity:1;transform:none}}
+@keyframes v51p{from{opacity:0;transform:rotate(-20deg) scale(.65)}60%{transform:rotate(5deg) scale(1.06)}to{opacity:1;transform:none}}
+
+/* ÚNICA animación final */
+#v51Final{
+ display:none;position:fixed;inset:0;z-index:200000;align-items:center;justify-content:center;overflow:hidden;
+ background:linear-gradient(135deg,#257f5d,#218f87 52%,#aa8b32);
+}
+#v51Final.on{display:flex}
+.v51-rays{position:absolute;inset:-35%;background:repeating-conic-gradient(from 0deg,rgba(213,173,53,.17) 0 2deg,transparent 2deg 13deg);animation:v51spin 16s linear 1}
+.v51-ring{position:absolute;width:90px;height:90px;border:3px solid #20a99f;border-radius:50%;animation:v51ring 3s ease-out 1}
+.v51-ring.r2{border-color:#35a96f;animation-delay:.35s}.v51-ring.r3{border-color:#d5ad35;animation-delay:.7s}
+.v51-final-content{position:relative;z-index:2;text-align:center;color:#f1f4dd}
+.v51-crown{font-size:120px;animation:v51crown 1.6s both}
+.v51-kicker{font-size:clamp(14px,2.2vw,23px);letter-spacing:.3em;font-weight:900;color:#d5ad35;animation:v51in .8s .4s both}
+.v51-title{font-size:clamp(40px,8vw,100px);font-weight:1000;letter-spacing:.06em;margin:12px 0;animation:v51title 1s .55s both}
+.v51-sub{font-size:clamp(17px,3vw,30px);font-weight:900;letter-spacing:.14em;color:#62cec2;animation:v51in .8s .9s both}
+.v51-stat{display:inline-block;margin-top:24px;padding:12px 24px;border:2px solid #d5ad35;border-radius:999px;background:rgba(31,95,75,.78);font-weight:900;animation:v51in .8s 1.1s both}
+@keyframes v51spin{to{transform:rotate(360deg)}}@keyframes v51ring{0%{transform:scale(.15);opacity:0}18%{opacity:.8}100%{transform:scale(7);opacity:0}}
+@keyframes v51crown{0%{transform:translateY(65px) scale(.3) rotate(-10deg);opacity:0}60%{transform:translateY(-7px) scale(1.08) rotate(2deg);opacity:1}100%{transform:none}}
+@keyframes v51title{from{transform:scale(.55);opacity:0;letter-spacing:.22em}to{transform:none;opacity:1;letter-spacing:.06em}}
+@keyframes v51in{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+</style>
+
+
+<style id="v52-fallen-css">
+.v52-dead-btn{
+ position:absolute;right:9px;top:9px;z-index:8;
+ width:32px;height:32px;border:1px solid rgba(213,173,53,.7);
+ border-radius:50%;background:rgba(25,70,58,.9);color:#f0cf58;
+ cursor:pointer;font-size:16px;line-height:1;
+}
+.v52-dead-btn:hover{transform:scale(1.08)}
+.variant{position:relative}
+.variant.v52-dead{opacity:.62!important;filter:saturate(.55)!important}
+.variant.v52-dead img{filter:grayscale(.55) brightness(.65)!important}
+.v52-dead-mark{
+ position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;
+ pointer-events:none;font-size:42px;font-weight:1000;color:#e2bd42;
+ text-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+</style>
+
+
+
+
+
+
+
+
+<style id="v58-ficha-description">
+.v58-ficha-description{
+  margin-top:12px;
+  padding:12px 14px;
+  border-left:3px solid #20a99f;
+  border-radius:10px;
+  background:rgba(32,169,159,.08);
+  line-height:1.5;
+  font-size:13px;
+}
+.v58-ficha-description strong{color:#b28e29}
+</style>
+
+</head><body><main><h1>Mi colección de Espíritus</h1><span class="v29-badge">V39 · COLECCIONISTA</span><div id="count"></div><div class="progress"><div id="bar"></div></div><div class="tools"><input id="search" placeholder="Buscar espíritu o variante..." autocomplete="off"><div class="filters"><button type="button" class="filter active" data-filter="all">Todos</button><button type="button" class="filter" data-filter="missing">Me faltan</button><button type="button" class="filter" data-filter="have">Los tengo</button><button type="button" class="filter" data-filter="mastered">Dominados</button><button type="button" class="filter" data-filter="dead">Caídos</button></div><button type="button" id="reset">↻ REINICIAR COLECCIÓN</button><button type="button" id="dominateAll" class="v36-dominate">★ DOMINAR TODOS LOS ESPÍRITUS</button></div>
+<details class="compact-panel" id="v31-collector" open>
+  <summary><span>🏆 TROFEOS Y PROGRESO</span><small>racha · logros · familias · historial</small></summary>
+  <div class="compact-panel-body">
   <div class="v31c-head">
     <div><span class="v31c-kicker">MODO COLECCIONISTA</span><h2 id="v31c-level">NOVATO</h2><small id="v31c-record">Récord: 0 variantes</small><div class="v35-levelbar"><i id="v35-levelbar"></i></div><small id="v35-next">Próximo nivel: 40%</small></div>
     <button id="v31c-today" type="button">📜 Hoy he conseguido...</button>
@@ -768,11 +995,37 @@ body:after,.pic:after,.spirit-title:after,#bar,h1,.v31c-holo,.v31c-first,.varian
   <div class="v31c-title">🎭 PROGRESO POR FAMILIA</div>
   <div id="v31c-families"></div>
   <div id="v31c-history" class="v31c-history" hidden><div class="v31c-title">📜 HISTORIAL DE HOY</div><div id="v31c-history-list"></div></div>
-</section>
-<div id="grid"><section class="spirit" data-i="0"><h2 class="spirit-title">Arbustín</h2><div class="variants"><article class="variant" data-i="0" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/bush_basic.webp" alt="Arbustín NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="0" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/bush_gold.webp" alt="Arbustín ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="0" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/bush_cheatmaster.webp" alt="Arbustín CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="0" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/bush_loothacker.webp" alt="Arbustín LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="1"><h2 class="spirit-title">Aventurero</h2><div class="variants"><article class="variant" data-i="1" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/adventure_basic.webp" alt="Aventurero NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="1" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/adventure_gold.webp" alt="Aventurero ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="1" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/adventure_cheatmaster.webp" alt="Aventurero CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="1" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/adventure_loothacker.webp" alt="Aventurero LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="2"><h2 class="spirit-title">8-Bits</h2><div class="variants"><article class="variant" data-i="2" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/eightbit_basic.webp" alt="8-Bits NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="2" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/eightbit_gold.webp" alt="8-Bits ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="2" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/eightbit_cheatmaster.webp" alt="8-Bits CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="2" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/eightbit_loothacker.webp" alt="8-Bits LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="3"><h2 class="spirit-title">Jonesy</h2><div class="variants"><article class="variant" data-i="3" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/jonesy_basic.webp" alt="Jonesy NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="3" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/jonesy_gold.webp" alt="Jonesy ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="3" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/jonesy_cheatmaster.webp" alt="Jonesy CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="3" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/jonesy_loothacker.webp" alt="Jonesy LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="4"><h2 class="spirit-title">Killswitch</h2><div class="variants"><article class="variant" data-i="4" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/killswitch_basic.webp" alt="Killswitch NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="4" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/killswitch_gold.webp" alt="Killswitch ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="4" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/killswitch_cheatmaster.webp" alt="Killswitch CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="4" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/killswitch_loothacker.webp" alt="Killswitch LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="5"><h2 class="spirit-title">Sonic</h2><div class="variants"><article class="variant" data-i="5" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/sonic_basic.webp" alt="Sonic NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="5" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/sonic_gold.webp" alt="Sonic ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="5" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/sonic_cheatmaster.webp" alt="Sonic CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="5" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/sonic_loothacker.webp" alt="Sonic LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="6"><h2 class="spirit-title">Tails</h2><div class="variants"><article class="variant" data-i="6" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/tails_basic.webp" alt="Tails NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="6" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/tails_gold.webp" alt="Tails ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="6" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/tails_cheatmaster.webp" alt="Tails CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="6" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/tails_loothacker.webp" alt="Tails LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="7"><h2 class="spirit-title">Shadow</h2><div class="variants"><article class="variant" data-i="7" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/shadow_basic.webp" alt="Shadow NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="7" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/shadow_gold.webp" alt="Shadow ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="7" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/shadow_cheatmaster.webp" alt="Shadow CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="7" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/shadow_loothacker.webp" alt="Shadow LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="8"><h2 class="spirit-title">Jackrabbit</h2><div class="variants"><article class="variant" data-i="8" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/jackrabbit_basic.webp" alt="Jackrabbit NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="8" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/jackrabbit_gold.webp" alt="Jackrabbit ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="8" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/jackrabbit_cheatmaster.webp" alt="Jackrabbit CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="8" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/jackrabbit_loothacker.webp" alt="Jackrabbit LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="9"><h2 class="spirit-title">Klombo</h2><div class="variants"><article class="variant" data-i="9" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/klombo_basic.webp" alt="Klombo NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="9" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/klombo_gold.webp" alt="Klombo ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="9" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/klombo_cheatmaster.webp" alt="Klombo CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="9" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/klombo_loothacker.webp" alt="Klombo LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="10"><h2 class="spirit-title">Corona de la Victoria</h2><div class="variants"><article class="variant" data-i="10" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/crown_basic.webp" alt="Corona de la Victoria NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="10" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/crown_gold.webp" alt="Corona de la Victoria ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="10" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/crown_cheatmaster.webp" alt="Corona de la Victoria CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="10" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/crown_loothacker.webp" alt="Corona de la Victoria LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="11"><h2 class="spirit-title">Explorador de la Tormenta</h2><div class="variants"><article class="variant" data-i="11" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/stormscout_basic.webp" alt="Explorador de la Tormenta NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="11" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/stormscout_gold.webp" alt="Explorador de la Tormenta ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="11" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/stormscout_cheatmaster.webp" alt="Explorador de la Tormenta CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="11" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/stormscout_loothacker.webp" alt="Explorador de la Tormenta LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="12"><h2 class="spirit-title">X-Ray</h2><div class="variants"><article class="variant" data-i="12" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/xray_basic.webp" alt="X-Ray NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="12" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/xray_gold.webp" alt="X-Ray ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="12" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/xray_cheatmaster.webp" alt="X-Ray CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="12" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/xray_loothacker.webp" alt="X-Ray LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="13"><h2 class="spirit-title">Onigiri</h2><div class="variants"><article class="variant" data-i="13" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/onigiri_basic.webp" alt="Onigiri NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="13" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/onigiri_gold.webp" alt="Onigiri ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="13" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/onigiri_cheatmaster.webp" alt="Onigiri CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="13" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/onigiri_loothacker.webp" alt="Onigiri LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="14"><h2 class="spirit-title">Mega Man</h2><div class="variants"><article class="variant" data-i="14" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/megaman_basic.webp" alt="Mega Man NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="15"><h2 class="spirit-title">Overshield</h2><div class="variants"><article class="variant" data-i="15" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/overshield_basic.webp" alt="Overshield NORMAL" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="15" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/overshield_gold.webp" alt="Overshield ORO" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="15" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/overshield_cheatmaster.webp" alt="Overshield CHEAT MASTER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="15" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://spritelocker.com/sprites/c7s4/overshield_loothacker.webp" alt="Overshield LOOT HACKER" loading="lazy"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section></div></main>
+  </div>
+</details>
 
+<details class="compact-panel" id="v39-save-details">
+  <summary><span></span><small>guardar · restaurar · sugerencias</small></summary>
+  <div class="compact-panel-body">
+<section class="v39-save-area">
+  <div class="v39-save-head">
+    <b>💾 COPIAS DE TU COLECCIÓN</b>
+    <span>Guarda tu colección antes de experimentar</span>
+  </div>
+  <div class="v39-save-grid">
+    <button type="button" data-v39-save="1">💾 GUARDAR 1<div class="v39-slot" id="v39-slot-1">Vacío</div></button>
+    <button type="button" data-v39-save="2">💾 GUARDAR 2<div class="v39-slot" id="v39-slot-2">Vacío</div></button>
+    <button type="button" data-v39-save="3">💾 GUARDAR 3<div class="v39-slot" id="v39-slot-3">Vacío</div></button>
+    <button type="button" class="v39-danger" id="v39-restore">↩️ RESTAURAR<div class="v39-slot">Elige una copia</div></button>
+  </div>
+  <div class="v39-save-grid" style="margin-top:9px">
+    <button type="button" id="v39-manage">🗂️ GESTIONAR COPIAS<div class="v39-slot">Ver y restaurar</div></button>
+    <button type="button" id="v39-suggestions">💡 SUGERENCIAS<div class="v39-slot">Dime qué añadir</div></button>
+  </div>
+</section>
+  </div>
+</details>
+<div id="grid"><section class="spirit" data-i="0"><h2 class="spirit-title">Arbustín</h2><div class="variants"><article class="variant" data-i="0" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/bush_basic.webp" alt="Arbustín NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="0" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/bush_gold.webp" alt="Arbustín ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="0" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/bush_cheatmaster.webp" alt="Arbustín CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="0" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/bush_loothacker.webp" alt="Arbustín LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="1"><h2 class="spirit-title">Aventurero</h2><div class="variants"><article class="variant" data-i="1" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/adventure_basic.webp" alt="Aventurero NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="1" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/adventure_gold.webp" alt="Aventurero ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="1" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/adventure_cheatmaster.webp" alt="Aventurero CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="1" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/adventure_loothacker.webp" alt="Aventurero LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="2"><h2 class="spirit-title">8-Bits</h2><div class="variants"><article class="variant" data-i="2" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/eightbit_basic.webp" alt="8-Bits NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="2" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/eightbit_gold.webp" alt="8-Bits ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="2" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/eightbit_cheatmaster.webp" alt="8-Bits CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="2" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/eightbit_loothacker.webp" alt="8-Bits LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="3"><h2 class="spirit-title">Jonesy</h2><div class="variants"><article class="variant" data-i="3" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/jonesy_basic.webp" alt="Jonesy NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="3" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/jonesy_gold.webp" alt="Jonesy ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="3" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/jonesy_cheatmaster.webp" alt="Jonesy CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="3" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/jonesy_loothacker.webp" alt="Jonesy LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="4"><h2 class="spirit-title">Killswitch</h2><div class="variants"><article class="variant" data-i="4" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/killswitch_basic.webp" alt="Killswitch NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="4" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/killswitch_gold.webp" alt="Killswitch ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="4" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/killswitch_cheatmaster.webp" alt="Killswitch CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="4" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/killswitch_loothacker.webp" alt="Killswitch LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="5"><h2 class="spirit-title">Sonic</h2><div class="variants"><article class="variant" data-i="5" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/sonic_basic.webp" alt="Sonic NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="5" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/sonic_gold.webp" alt="Sonic ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="5" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/sonic_cheatmaster.webp" alt="Sonic CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="5" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/sonic_loothacker.webp" alt="Sonic LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="6"><h2 class="spirit-title">Tails</h2><div class="variants"><article class="variant" data-i="6" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/tails_basic.webp" alt="Tails NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="6" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/tails_gold.webp" alt="Tails ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="6" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/tails_cheatmaster.webp" alt="Tails CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="6" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/tails_loothacker.webp" alt="Tails LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="7"><h2 class="spirit-title">Shadow</h2><div class="variants"><article class="variant" data-i="7" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/shadow_basic.webp" alt="Shadow NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="7" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/shadow_gold.webp" alt="Shadow ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="7" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/shadow_cheatmaster.webp" alt="Shadow CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="7" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/shadow_loothacker.webp" alt="Shadow LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="8"><h2 class="spirit-title">Jackrabbit</h2><div class="variants"><article class="variant" data-i="8" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/jackrabbit_basic.webp" alt="Jackrabbit NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="8" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/jackrabbit_gold.webp" alt="Jackrabbit ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="8" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/jackrabbit_cheatmaster.webp" alt="Jackrabbit CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="8" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/jackrabbit_loothacker.webp" alt="Jackrabbit LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="9"><h2 class="spirit-title">Klombo</h2><div class="variants"><article class="variant" data-i="9" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/klombo_basic.webp" alt="Klombo NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="9" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/klombo_gold.webp" alt="Klombo ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="9" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/klombo_cheatmaster.webp" alt="Klombo CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="9" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/klombo_loothacker.webp" alt="Klombo LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="10"><h2 class="spirit-title">Corona de la Victoria</h2><div class="variants"><article class="variant" data-i="10" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/crown_basic.webp" alt="Corona de la Victoria NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="10" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/crown_gold.webp" alt="Corona de la Victoria ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="10" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/crown_cheatmaster.webp" alt="Corona de la Victoria CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="10" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/crown_loothacker.webp" alt="Corona de la Victoria LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="11"><h2 class="spirit-title">Explorador de la Tormenta</h2><div class="variants"><article class="variant" data-i="11" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/stormscout_basic.webp" alt="Explorador de la Tormenta NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="11" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/stormscout_gold.webp" alt="Explorador de la Tormenta ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="11" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/stormscout_cheatmaster.webp" alt="Explorador de la Tormenta CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="11" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/stormscout_loothacker.webp" alt="Explorador de la Tormenta LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="12"><h2 class="spirit-title">X-Ray</h2><div class="variants"><article class="variant" data-i="12" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/xray_basic.webp" alt="X-Ray NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="12" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/xray_gold.webp" alt="X-Ray ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="12" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/xray_cheatmaster.webp" alt="X-Ray CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="12" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/xray_loothacker.webp" alt="X-Ray LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="13"><h2 class="spirit-title">Onigiri</h2><div class="variants"><article class="variant" data-i="13" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/onigiri_basic.webp" alt="Onigiri NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="13" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/onigiri_gold.webp" alt="Onigiri ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="13" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/onigiri_cheatmaster.webp" alt="Onigiri CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="13" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/onigiri_loothacker.webp" alt="Onigiri LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="14"><h2 class="spirit-title">Mega Man</h2><div class="variants"><article class="variant" data-i="14" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/megaman_basic.webp" alt="Mega Man NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section><section class="spirit" data-i="15"><h2 class="spirit-title">Overshield</h2><div class="variants"><article class="variant" data-i="15" data-j="0"><div class="label">NORMAL</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/overshield_basic.webp" alt="Overshield NORMAL" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant gold" data-i="15" data-j="1"><div class="label">ORO</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/overshield_gold.webp" alt="Overshield ORO" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant cheat" data-i="15" data-j="2"><div class="label">CHEAT MASTER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/overshield_cheatmaster.webp" alt="Overshield CHEAT MASTER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article><article class="variant loot" data-i="15" data-j="3"><div class="label">LOOT HACKER</div><div class="pic"><img src="https://images.weserv.nl/?url=spritelocker.com/sprites/c7s4/overshield_loothacker.webp" alt="Overshield LOOT HACKER" loading="lazy" referrerpolicy="no-referrer"></div><div class="variant-state">○ FALTA</div><button type="button" class="dead-btn" title="Marcar como caído">☠</button></article></div></section></div></main>
+
+<details class="compact-panel" id="v37-tools-details">
+  <summary><span></span><small>enciclopedia · sorpresa · caídos · línea temporal</small></summary>
+  <div class="compact-panel-body">
 <section id="v37-tools" class="v37-tools">
-  <div class="v37-tools-title">🧭 CENTRO DEL COLECCIONISTA</div>
+  <div class="v37-tools-title"></div>
   <div class="v37-tools-grid">
     <button type="button" id="v37-encyclopedia">📖 ENCICLOPEDIA</button>
     <button type="button" id="v37-random">🎲 VARIANTE SORPRESA</button>
@@ -780,6 +1033,8 @@ body:after,.pic:after,.spirit-title:after,#bar,h1,.v31c-holo,.v31c-first,.varian
     <button type="button" id="v37-timeline">📜 LÍNEA TEMPORAL</button>
   </div>
 </section>
+  </div>
+</details>
 
 <div id="v37-modal" class="v37-modal" hidden>
   <div class="v37-modal-box">
@@ -787,6 +1042,9 @@ body:after,.pic:after,.spirit-title:after,#bar,h1,.v31c-holo,.v31c-first,.varian
     <div id="v37-modal-content"></div>
   </div>
 </div>
+<details class="compact-panel" id="update-history-details">
+  <summary><span>📜 HISTORIAL DE ACTUALIZACIONES</span><small>versiones y cambios</small></summary>
+  <div class="compact-panel-body">
 <section id="updateHistory" class="update-history">
   <div class="history-head">
     <div class="history-kicker">HISTORIAL DEL PROYECTO</div>
@@ -840,7 +1098,11 @@ body:after,.pic:after,.spirit-title:after,#bar,h1,.v31c-holo,.v31c-first,.varian
       <div><h3>Refinamiento visual</h3><p>Se mantuvo la estética nueva y las animaciones mientras se limpiaron elementos que ya no eran necesarios en la interfaz.</p></div>
     </article>
 
-    <article class="update-item current">
+    <article class="update-item">
+  <div class="update-version">V39</div>
+  <div><h3>Copias de colección y modo pruebas</h3><p>Guarda hasta tres copias de tu colección, experimenta sin miedo, restaura cuando quieras y añade sugerencias desde el propio tracker. También se refuerza la interacción de variantes caídas.</p></div>
+</article>
+<article class="update-item current">
       <span class="update-version">V35</span>
       <div><h3>Modo coleccionista mejorado</h3><p>Nuevas estadísticas de racha, variantes oro, nivel de colección y progreso hacia el siguiente rango.</p></div>
     </article>
@@ -861,6 +1123,8 @@ body:after,.pic:after,.spirit-title:after,#bar,h1,.v31c-holo,.v31c-first,.varian
       <div><h3>Enciclopedia y rendimiento</h3><p>Nuevo modo Enciclopedia, rangos, logros ampliados, línea temporal, variante sorpresa, archivo de caídos y una optimización centrada en reducir animaciones y cálculos continuos.</p></div>
     </article>  </div>
 </section>
+  </div>
+</details>
 
 <div id="global"><div class="global-box"><div class="global-star">★</div><h2>COLECCIÓN COMPLETADA</h2><button type="button" id="closeGlobal">SEGUIR EN LA COLECCIÓN</button></div></div><div class="v34-ficha" id="v34-ficha" aria-hidden="true"><div class="v34-box" role="dialog" aria-modal="true" aria-labelledby="v34-title"><div class="v34-head"><img class="v34-img" id="v34-img" alt=""><div><h3 class="v34-title" id="v34-title">Sprite</h3><p class="v34-state" id="v34-state"></p></div></div><div class="v34-grid"><div class="v34-item"><b>PROGRESO DEL SPRITE</b><span id="v34-progress">0/0</span></div><div class="v34-item"><b>RAREZA</b><span id="v34-rarity">NORMAL</span></div><div class="v34-item"><b>EFECTO</b><span id="v34-power">Información del Sprite</span></div><div class="v34-item"><b>UBICACIÓN</b><span id="v34-location">Consulta el mapa del tracker</span></div></div><button class="v34-close" id="v34-close" type="button">Cerrar ficha</button></div></div><div class="v34-toast" id="v34-toast" aria-live="polite"></div><div class="v34-complete" id="v34-complete" aria-hidden="true"><div class="v34-complete-box" role="dialog" aria-modal="true"><div class="v34-complete-icon">🏆</div><h2>COLECCIÓN COMPLETA</h2><p>Has conseguido y dominado todas las variantes disponibles.</p><button id="v34-complete-close" type="button">Seguir explorando</button></div></div><script>const STORAGE="fortniteSpiritTracker_V22_FINAL";let data={},filter="all",globalShown=false;try{const raw=localStorage.getItem(STORAGE);data=raw?JSON.parse(raw):{};if(!data||typeof data!=="object"||Array.isArray(data))data={}}catch(e){data={}}const spirits=[...document.querySelectorAll(".spirit")];function getState(i,j){const n=Number(data[i+"-"+j]);return[0,1,2,3].includes(n)?n:0}function save(){try{localStorage.setItem(STORAGE,JSON.stringify(data))}catch(e){}try{if(window.__v37CollectorUpdate)window.__v37CollectorUpdate()}catch(e){}}function status(s){return s===1?"✓ LO TENGO":s===2?"★ DOMINADO":s===3?"☠ CAÍDO":"○ FALTA"}function matches(s,i,j){const q=document.getElementById("search").value.trim().toLowerCase(),title=spirits[i].querySelector(".spirit-title").textContent.toLowerCase(),label=spirits[i].querySelectorAll(".variant")[j]?.querySelector(".label")?.textContent.toLowerCase()||"";if(q&&!(`${title} ${label}`).includes(q))return false;if(filter==="all")return true;if(filter==="missing")return s===0;if(filter==="have")return s===1;if(filter==="mastered")return s===2;if(filter==="dead")return s===3;return true}function render(){let total=0,got=0,mastered=0,dead=0,shown=0;spirits.forEach((sp,i)=>{let visible=0;sp.querySelectorAll(".variant").forEach((v,j)=>{const s=getState(i,j);total++;if(s===1||s===2)got++;if(s===2)mastered++;if(s===3)dead++;v.classList.toggle("collected",s===1);v.classList.toggle("mastered",s===2);v.classList.toggle("dead",s===3);v.querySelector(".variant-state").textContent=status(s);const show=matches(s,i,j);v.style.display=show?"block":"none";if(show){visible++;shown++}});sp.style.display=visible?"block":"none"});document.getElementById("count").textContent=`${got} / ${total} variantes conseguidas · ${mastered} dominadas · ${dead} caídas · ${Math.round(got/total*100)}%`;document.getElementById("bar").style.width=Math.round(got/total*100)+"%";let empty=document.getElementById("empty");if(!shown){if(!empty){empty=document.createElement("div");empty.id="empty";empty.className="empty";empty.textContent="No hay variantes que coincidan con este filtro.";document.getElementById("grid").append(empty)}empty.style.display="block"}else if(empty)empty.style.display="none"}function celebrateSpirit(i){const vs=[...spirits[i].querySelectorAll(".variant")];if(vs.length&&vs.every((_,j)=>getState(i,j)===2)){vs.forEach(v=>v.classList.remove("spirit-complete"));void spirits[i].offsetWidth;vs.forEach(v=>v.classList.add("spirit-complete"));setTimeout(()=>vs.forEach(v=>v.classList.remove("spirit-complete")),1000)}}function checkGlobal(){const done=spirits.length>0&&spirits.every((sp,i)=>[...sp.querySelectorAll(".variant")].every((_,j)=>getState(i,j)===2));if(done&&!globalShown){globalShown=true;document.getElementById("global").style.display="flex"}if(!done)globalShown=false}spirits.forEach((sp,i)=>sp.querySelectorAll(".variant").forEach((v,j)=>{v.addEventListener("click",e=>{if(e.target.closest(".dead-btn"))return;const s=getState(i,j);data[i+"-"+j]=s===0?1:s===1?2:0;save();render();celebrateSpirit(i);checkGlobal()});v.querySelector(".dead-btn").addEventListener("click",e=>{e.preventDefault();e.stopPropagation();const s=getState(i,j);if(s===3)delete data[i+"-"+j];else data[i+"-"+j]=3;save();render();checkGlobal()})}));document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.filter;render()}));document.getElementById("search").addEventListener("input",render);document.getElementById("reset").addEventListener("click",()=>{
   data={};
@@ -1246,4 +1510,341 @@ document.addEventListener("click",e=>{if(!e.target.closest(".variant-info"))clos
  }catch(e){}
 })();
 
-render();try{if(window.__v37CollectorUpdate)window.__v37CollectorUpdate()}catch(e){}</script></body></html>
+
+/* V39 · COPIAS, SUGERENCIAS, FAMILIAS Y CAÍDOS */
+(function(){
+  try{
+    var SAVE_KEY="fortniteSpiritTracker_V39_SAVES";
+    var SUG_KEY="fortniteSpiritTracker_V39_SUGGESTIONS";
+    function read(key, fallback){
+      try{var x=JSON.parse(localStorage.getItem(key)||"");return x==null?fallback:x}catch(e){return fallback}
+    }
+    function write(key,val){try{localStorage.setItem(key,JSON.stringify(val));return true}catch(e){return false}}
+    var saves=read(SAVE_KEY,{});
+    if(!saves||typeof saves!=="object")saves={};
+
+    function stamp(){return new Date().toLocaleString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})}
+    function updateSlots(){
+      [1,2,3].forEach(function(n){
+        var el=document.getElementById("v39-slot-"+n), s=saves[n];
+        if(el)el.innerHTML=s?"<strong>Guardada "+s.time+"</strong>":"Vacío";
+      });
+    }
+    function saveSlot(n){
+      saves[n]={data:JSON.parse(JSON.stringify(data)),time:stamp()};
+      write(SAVE_KEY,saves);updateSlots();
+      var toast=document.getElementById("v34-toast");
+      if(toast){toast.textContent="💾 Colección guardada en la copia "+n;toast.classList.add("show");setTimeout(function(){toast.classList.remove("show")},1500)}
+    }
+    function restoreSlot(n){
+      var s=saves[n];
+      if(!s)return false;
+      data=JSON.parse(JSON.stringify(s.data||{}));
+      save();render();try{checkGlobal()}catch(e){}
+      var toast=document.getElementById("v34-toast");
+      if(toast){toast.textContent="↩️ Colección restaurada desde la copia "+n;toast.classList.add("show");setTimeout(function(){toast.classList.remove("show")},1500)}
+      return true;
+    }
+    document.querySelectorAll("[data-v39-save]").forEach(function(b){
+      b.addEventListener("click",function(){saveSlot(Number(b.getAttribute("data-v39-save")))});
+    });
+    var restore=document.getElementById("v39-restore");
+    var manage=document.getElementById("v39-manage");
+    var suggestions=document.getElementById("v39-suggestions");
+    var modal=document.getElementById("v37-modal"),content=document.getElementById("v37-modal-content");
+
+    function showV39(htmlText){if(modal&&content){content.innerHTML=htmlText;modal.hidden=false}}
+    function closeV39(){if(modal)modal.hidden=true}
+
+    function manager(){
+      var out='<div class="v37-kicker">V39 · SEGURIDAD DE COLECCIÓN</div><div class="v37-title">🗂️ Tus copias</div>';
+      [1,2,3].forEach(function(n){
+        var s=saves[n];
+        out+='<div class="v37-card" style="margin-bottom:10px"><h4>Copia '+n+'</h4><p>'+(s?'Guardada el '+s.time:'Vacía')+'</p>';
+        if(s)out+='<button type="button" class="v37-rank" data-v39-restore-slot="'+n+'">↩️ RESTAURAR ESTA COPIA</button> <button type="button" class="v37-rank" data-v39-delete-slot="'+n+'">🗑️ BORRAR</button>';
+        out+='</div>';
+      });
+      out+='<p class="v37-mini">Las copias se quedan guardadas en este navegador y no se borran al usar “Reiniciar colección”.</p>';
+      showV39(out);
+    }
+    if(restore)restore.addEventListener("click",manager);
+    if(manage)manage.addEventListener("click",manager);
+    if(content)content.addEventListener("click",function(e){
+      var r=e.target.closest&&e.target.closest("[data-v39-restore-slot]");
+      var d=e.target.closest&&e.target.closest("[data-v39-delete-slot]");
+      if(r){var n=Number(r.getAttribute("data-v39-restore-slot"));if(restoreSlot(n))closeV39()}
+      if(d){var n2=Number(d.getAttribute("data-v39-delete-slot"));delete saves[n2];write(SAVE_KEY,saves);updateSlots();manager()}
+    });
+
+    function suggestionsPanel(){
+      var list=read(SUG_KEY,[]);
+      if(!Array.isArray(list))list=[];
+      var rows=list.slice().reverse().map(function(x){
+        return '<div class="v39-suggestion"><small>'+String(x.time||"")+'</small><p>'+String(x.text||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")+'</p></div>';
+      }).join("");
+      showV39('<div class="v37-kicker">V39 · FEEDBACK</div><div class="v37-title">💡 Sugerencias</div><div class="v39-form"><textarea id="v39-suggestion-text" maxlength="500" placeholder="Escribe qué quieres que añadamos, cambiemos o mejoremos..."></textarea><button type="button" id="v39-send-suggestion">ENVIAR SUGERENCIA</button></div><div style="margin-top:20px"><div class="v39-panel-title">MIS SUGERENCIAS</div>'+(rows||'<p class="v37-mini">Todavía no has enviado ninguna.</p>')+'</div>');
+      var send=document.getElementById("v39-send-suggestion");
+      if(send)send.addEventListener("click",function(){
+        var ta=document.getElementById("v39-suggestion-text"),txt=(ta?ta.value:"").trim();
+        if(!txt)return;
+        var arr=read(SUG_KEY,[]);if(!Array.isArray(arr))arr=[];
+        arr.push({text:txt,time:stamp()});arr=arr.slice(-50);write(SUG_KEY,arr);suggestionsPanel();
+      });
+    }
+    if(suggestions)suggestions.addEventListener("click",suggestionsPanel);
+    updateSlots();
+
+    /* CAÍDO fiable: captura antes de los handlers de burbuja existentes. */
+    document.addEventListener("click",function(e){
+      var b=e.target.closest&&e.target.closest(".dead-btn");
+      if(!b)return;
+      e.preventDefault();e.stopPropagation();
+      var v=b.closest(".variant");if(!v)return;
+      var i=Number(v.getAttribute("data-i")),j=Number(v.getAttribute("data-j")),key=i+"-"+j,s=getState(i,j);
+      if(s===3)delete data[key];else data[key]=3;
+      save();render();try{checkGlobal()}catch(err){}
+    },true);
+
+    /* Familia completada V39: reutiliza las imágenes reales de las cuatro variantes. */
+    var familyModal=document.createElement("div");
+    familyModal.className="v39-family-modal";
+    familyModal.setAttribute("aria-hidden","true");
+    familyModal.innerHTML='<div class="v39-family-box" role="dialog" aria-modal="true"><div class="v39-family-kicker">NUEVA FAMILIA DOMINADA</div><div class="v39-family-title" id="v39-family-title">FAMILIA COMPLETADA</div><p class="v39-family-sub">Has dominado todas las variantes de este Sprite.</p><div class="v39-family-variants" id="v39-family-variants"></div><button type="button" class="v39-family-close" id="v39-family-close">CONTINUAR</button></div>';
+    document.body.appendChild(familyModal);
+    var fTitle=familyModal.querySelector("#v39-family-title"),fVars=familyModal.querySelector("#v39-family-variants"),fClose=familyModal.querySelector("#v39-family-close");
+    function showFamily(i){
+      var sp=spirits[i];if(!sp)return;
+      var title=(sp.querySelector(".spirit-title")||{}).textContent||"Sprite";
+      fTitle.textContent="👑 "+title.toUpperCase();
+      fVars.innerHTML="";
+      sp.querySelectorAll(".variant").forEach(function(v){
+        var img=v.querySelector("img"),lab=(v.querySelector(".label")||{}).textContent||"VARIANTE";
+        var card=document.createElement("div");card.className="v39-family-card";
+        if(img){var im=img.cloneNode(true);im.loading="eager";card.appendChild(im)}
+        var b=document.createElement("b");b.textContent=lab;card.appendChild(b);fVars.appendChild(card);
+      });
+      familyModal.classList.add("show");familyModal.setAttribute("aria-hidden","false");
+    }
+    function hideFamily(){familyModal.classList.remove("show");familyModal.setAttribute("aria-hidden","true")}
+    if(fClose)fClose.addEventListener("click",hideFamily);
+    familyModal.addEventListener("click",function(e){if(e.target===familyModal)hideFamily()});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape"){hideFamily();if(modal)modal.hidden=true}});
+
+    var v39Seen={};
+    var previousCelebrate=celebrateSpirit;
+    celebrateSpirit=function(i){
+      var before=false,after=false,vs=spirits[i]?spirits[i].querySelectorAll(".variant"):[];
+      for(var j=0;j<vs.length;j++)if(getState(i,j)===2)before=true;
+      previousCelebrate(i);
+      after=vs.length>0;
+      for(var k=0;k<vs.length;k++)if(getState(i,k)!==2){after=false;break}
+      if(!after)v39Seen[i]=false;
+      if(after&&!v39Seen[i]){v39Seen[i]=true;setTimeout(function(){showFamily(i)},180)}
+    };
+  }catch(e){}
+})();
+
+render();try{if(window.__v37CollectorUpdate)window.__v37CollectorUpdate()}catch(e){}</script>
+<script id="v39-image-fallback">
+document.addEventListener("error",function(e){
+  var img=e.target;
+  if(!img||img.tagName!=="IMG"||!img.src)return;
+  if(img.dataset.v39Failed)return;
+  img.dataset.v39Failed="1";
+  img.alt="Imagen no disponible";
+  var p=img.closest(".pic,.v39-family-card");
+  if(p)p.classList.add("v39-img-failed");
+},true);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script id="v51-trophy-and-final-js">
+(()=> {
+ const palette=[
+ ['#35a96f','#d5ad35','🌱'],['#20a99f','#35a96f','🌀'],['#d5ad35','#20a99f','👑'],['#4fbd78','#d5ad35','✦'],
+ ['#28b9ad','#d5ad35','◆'],['#e0bd42','#35a96f','★'],['#35a96f','#20a99f','⬢'],['#20a99f','#d5ad35','◈'],
+ ['#d5ad35','#35a96f','♛'],['#35a96f','#d5ad35','✚'],['#20a99f','#35a96f','◎'],['#d5ad35','#20a99f','◇'],
+ ['#35a96f','#20a99f','⚡'],['#20a99f','#d5ad35','⬡'],['#d5ad35','#35a96f','☀'],['#35a96f','#20a99f','✧']
+ ];
+ const spirits=['Arbustín','Aventurero','8-Bits','Jonesy','Killswitch','Sonic','Tails','Shadow','Jackrabbit','Klombo','Corona','Explorador','X-Ray','Onigiri','Mega Man','Overshield'];
+ const anim=['v51-a','v51-b','v51-c','v51-d','v51-e','v51-f','v51-g','v51-h','v51-i','v51-j','v51-k','v51-l','v51-m','v51-n','v51-o','v51-p'];
+
+ function achievements(){
+  return [...document.querySelectorAll('.v31c-achievement.on')].map((e,i)=>({
+   name:(e.querySelector('b')?.textContent||e.textContent||('Trofeo '+(i+1))).trim()
+  }));
+ }
+ function complete(){
+  const v=[...document.querySelectorAll('.variant')];
+  return v.length>=61&&v.every(x=>x.classList.contains('mastered'));
+ }
+ function setup(){
+  if(document.getElementById('v51Trophy'))return;
+  const t=document.createElement('div');t.id='v51Trophy';
+  t.innerHTML='<div class="v51-card"><div class="v51-icon"></div><div class="v51-name"></div><div class="v51-reason"></div><div class="v51-line"><i></i></div></div>';
+  document.body.appendChild(t);
+  const f=document.createElement('div');f.id='v51Final';
+  f.innerHTML='<div class="v51-rays"></div><div class="v51-ring"></div><div class="v51-ring r2"></div><div class="v51-ring r3"></div><div class="v51-final-content"><div class="v51-crown">👑</div><div class="v51-kicker">LA COLECCIÓN HA DESPERTADO</div><div class="v51-title">LEGENDARIO</div><div class="v51-sub">DOMINIO TOTAL</div><div class="v51-stat">61 / 61 VARIANTES · 100%</div></div>';
+  document.body.appendChild(f);
+ }
+ function show(name){
+  setup();
+  let i=spirits.findIndex(s=>name.toLowerCase().includes(s.toLowerCase()));
+  if(i<0)i=Math.abs([...name].reduce((a,c)=>a+c.charCodeAt(0),0))%16;
+  const p=palette[i],card=document.querySelector('#v51Trophy .v51-card');
+  card.className='v51-card '+anim[i];
+  card.style.borderColor=p[0];card.style.background='#d9eadf';
+  document.querySelector('#v51Trophy .v51-icon').textContent=p[2];
+  document.querySelector('#v51Trophy .v51-icon').style.color=p[0];
+  document.querySelector('#v51Trophy .v51-name').textContent=name;
+  document.querySelector('#v51Trophy .v51-name').style.color=p[1];
+  document.querySelector('#v51Trophy .v51-reason').textContent=i===0?'PRIMER ESPÍRITU · COMIENZA LA COLECCIÓN':('TROFEO '+(i+1)+' · NUEVO HITO DESBLOQUEADO');
+  document.querySelector('#v51Trophy .v51-line i').style.background='linear-gradient(90deg,'+p[0]+','+p[1]+')';
+  const box=document.getElementById('v51Trophy');box.classList.remove('on');void box.offsetWidth;box.classList.add('on');
+  setTimeout(()=>box.classList.remove('on'),2100);
+ }
+ let previous=[];
+ let finalWas=false;
+ setTimeout(()=>{setup();previous=achievements().map(x=>x.name).sort();finalWas=complete()},700);
+ setInterval(()=>{
+  const now=achievements().map(x=>x.name).sort(), old=new Set(previous);
+  now.filter(x=>!old.has(x)).forEach((n,i)=>setTimeout(()=>show(n),i*2250));
+  if(complete()&&!finalWas){
+   finalWas=true;
+   setTimeout(()=>{
+    const f=document.getElementById('v51Final');f.classList.remove('on');void f.offsetWidth;f.classList.add('on');
+    setTimeout(()=>f.classList.remove('on'),9500);
+   },Math.max(2300,now.filter(x=>!old.has(x)).length*2250));
+  }
+  if(!complete())finalWas=false;
+  previous=now;
+ },900);
+})();
+</script>
+
+
+<script id="v52-fallen-system">
+(()=> {
+ function addButtons(){
+  document.querySelectorAll('.variant').forEach(v=>{
+   if(v.querySelector('.v52-dead-btn'))return;
+   const b=document.createElement('button');
+   b.className='v52-dead-btn';b.type='button';b.title='Marcar espíritu como caído';b.textContent='☠';
+   b.addEventListener('click',e=>{
+    e.preventDefault();e.stopPropagation();
+    v.classList.toggle('v52-dead');
+    let mark=v.querySelector('.v52-dead-mark');
+    if(v.classList.contains('v52-dead')){
+      if(!mark){mark=document.createElement('div');mark.className='v52-dead-mark';mark.textContent='☠';v.appendChild(mark)}
+      b.title='Quitar estado caído';
+    }else{
+      mark?.remove();b.title='Marcar espíritu como caído';
+    }
+    // Keep the state local to this browser session without adding a save/copy mode.
+    const key=v.dataset.variant||v.getAttribute('data-variant')||v.textContent.trim().slice(0,80);
+    try{
+      const s=JSON.parse(localStorage.getItem('v52_fallen')||'{}');
+      if(v.classList.contains('v52-dead'))s[key]=1;else delete s[key];
+      localStorage.setItem('v52_fallen',JSON.stringify(s));
+    }catch(_){}
+   });
+   v.appendChild(b);
+   const key=v.dataset.variant||v.getAttribute('data-variant')||v.textContent.trim().slice(0,80);
+   try{
+    const s=JSON.parse(localStorage.getItem('v52_fallen')||'{}');
+    if(s[key]){
+      v.classList.add('v52-dead');
+      const mark=document.createElement('div');mark.className='v52-dead-mark';mark.textContent='☠';v.appendChild(mark);
+      b.title='Quitar estado caído';
+    }
+   }catch(_){}
+  });
+ }
+ addButtons();
+ new MutationObserver(addButtons).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+
+
+
+
+
+
+
+<script id="v58-ficha-description-js">
+(()=> {
+ const descriptions = {
+  "Arbustín":"El espíritu que inicia la colección. Su temática vegetal representa el comienzo del recorrido y sirve como punto de partida para reunir todas sus variantes.",
+  "Aventurero":"Un espíritu ligado a la exploración y al descubrimiento. Representa la parte de la colección centrada en avanzar y encontrar nuevas piezas.",
+  "8-Bits":"Un espíritu con estética retro que aporta una identidad diferente al conjunto y conecta la colección con el estilo clásico de los videojuegos.",
+  "Jonesy":"Una pieza muy reconocible del universo Fortnite. Su presencia representa una de las identidades más características dentro de la colección.",
+  "Killswitch":"Un espíritu de estética tecnológica y mecánica. Su diseño aporta un contraste futurista frente a los espíritus de temática más natural.",
+  "Sonic":"Un espíritu marcado por la velocidad y la energía. Pertenece a una familia especialmente reconocible dentro de la colección.",
+  "Tails":"El compañero de Sonic. Su identidad tecnológica y aérea le da personalidad propia y lo diferencia del resto de espíritus.",
+  "Shadow":"Una figura de aspecto más misterioso dentro de la familia de Sonic. Su identidad visual está claramente diferenciada de sus compañeros.",
+  "Jackrabbit":"Un espíritu de carácter dinámico y juguetón que aporta variedad al conjunto y contrasta con las piezas de aspecto más tecnológico.",
+  "Klombo":"Una de las piezas más especiales de la colección. Su temática está relacionada con Klombo y le da una identidad muy particular dentro del tracker.",
+  "Corona de la Victoria":"Un símbolo de triunfo. Representa conseguir la victoria y convertir ese logro en una pieza permanente de la colección.",
+  "Explorador de la Tormenta":"Un espíritu relacionado con la tormenta y la supervivencia. Su concepto encaja con el lado estratégico de Fortnite.",
+  "X-Ray":"Un espíritu de estética científica y tecnológica. Su identidad gira alrededor de observar, detectar y analizar.",
+  "Onigiri":"Una pieza de inspiración japonesa que destaca por su temática propia y por aportar variedad visual al conjunto.",
+  "Mega Man":"Una pieza especial con identidad propia. Su configuración de variantes es diferente a la de la mayoría de espíritus de la colección.",
+  "Overshield":"Un espíritu centrado en la protección y la resistencia. Representa la idea de mantenerse protegido durante el combate."
+ };
+
+ function patch(){
+   const dialogs = [...document.querySelectorAll(
+     '[role="dialog"],.modal,.ficha,.spirit-modal,.detail-modal,.v31c-modal,.v31c-ficha'
+   )].filter(el => getComputedStyle(el).display !== 'none');
+
+   dialogs.forEach(el => {
+     if(el.querySelector('.v58-ficha-description')) return;
+
+     const text = (el.innerText || '').toLowerCase();
+     const name = Object.keys(descriptions).find(
+       key => text.includes(key.toLowerCase())
+     );
+     if(!name) return;
+
+     const box = document.createElement('div');
+     box.className = 'v58-ficha-description';
+     box.innerHTML =
+       '<strong>Descripción</strong><br>' + descriptions[name];
+     el.appendChild(box);
+   });
+ }
+
+ new MutationObserver(patch).observe(document.body,{childList:true,subtree:true});
+ patch();
+})();
+</script>
+
+</body></html>
+
+
+
+
+<style id="v52-collector-hide">
+/* Centro del coleccionista eliminado */
+#collectorCenter,.collector-center,.collector-panel,.collector-tools,
+[id*="collector"],[class*="collector"]{display:none!important}
+</style>
